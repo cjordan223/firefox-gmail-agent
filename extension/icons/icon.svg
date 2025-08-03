@@ -1,0 +1,18 @@
+<svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background circle -->
+    <circle cx="48" cy="48" r="44" fill="#1a73e8" stroke="#1557b0" stroke-width="2" />
+
+    <!-- Envelope -->
+    <path d="M24 32 L48 48 L72 32 L72 64 L24 64 Z" fill="white" />
+
+    <!-- Envelope flap -->
+    <path d="M24 32 L48 48 L72 32" fill="none" stroke="white" stroke-width="2" />
+
+    <!-- Capture arrow -->
+    <path d="M48 56 L48 68 M42 62 L48 68 L54 62" stroke="white" stroke-width="3" fill="none"
+        stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- Plus sign for capture -->
+    <circle cx="48" cy="76" r="8" fill="#34a853" />
+    <path d="M48 72 L48 80 M44 76 L52 76" stroke="white" stroke-width="2" stroke-linecap="round" />
+</svg> 

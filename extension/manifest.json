@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Gmail Email Tracker",
+  "version": "1.0.0",
+  "description": "Capture Gmail emails to a local tracker with annotation capabilities",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "https://mail.google.com/*",
+    "http://localhost:8000/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "icons": {
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png"
+  }
+} 

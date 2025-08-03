@@ -1,0 +1,82 @@
+/* Additional App-specific styles */
+
+.email-card {
+  position: relative;
+}
+
+.email-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3498db, #2ecc71);
+  border-radius: 12px 12px 0 0;
+}
+
+.email-card:hover::before {
+  background: linear-gradient(90deg, #2980b9, #27ae60);
+}
+
+.modal-content {
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.stats {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.email-card {
+  animation: fadeInUp 0.4s ease-out;
+  animation-fill-mode: both;
+}
+
+.email-card:nth-child(1) { animation-delay: 0.1s; }
+.email-card:nth-child(2) { animation-delay: 0.2s; }
+.email-card:nth-child(3) { animation-delay: 0.3s; }
+.email-card:nth-child(4) { animation-delay: 0.4s; }
+.email-card:nth-child(5) { animation-delay: 0.5s; }
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-content {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .email-actions {
+    flex-direction: column;
+  }
+  
+  .email-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+} 

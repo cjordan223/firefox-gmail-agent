@@ -1,0 +1,78 @@
+/* Gmail Email Tracker Styles */
+
+.gmail-tracker-btn {
+  background: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: background-color 0.2s ease;
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+}
+
+.gmail-tracker-btn:hover {
+  background: #1557b0;
+}
+
+.gmail-tracker-btn:active {
+  background: #0d47a1;
+}
+
+/* Notification styles */
+.gmail-tracker-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 10000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  min-width: 300px;
+  max-width: 400px;
+}
+
+.gmail-tracker-success {
+  background: linear-gradient(135deg, #34a853, #2d8f47);
+  color: white;
+  border-left: 4px solid #27ae60;
+}
+
+.gmail-tracker-error {
+  background: linear-gradient(135deg, #ea4335, #d32f2f);
+  color: white;
+  border-left: 4px solid #c62828;
+}
+
+.gmail-tracker-info {
+  background: linear-gradient(135deg, #1a73e8, #1565c0);
+  color: white;
+  border-left: 4px solid #0d47a1;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Ensure button doesn't interfere with Gmail's layout */
+.gmail-tracker-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  box-sizing: border-box;
+} 
