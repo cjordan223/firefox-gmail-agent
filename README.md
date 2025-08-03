@@ -168,6 +168,14 @@ For production deployment:
 6. **Deploy dashboard** to a web server
 7. **Add environment variables** for configuration
 
+## 📝 Future Enhancements / TODO
+
+- [ ] **Public Hosting**: Research the feasibility of a publicly hosted version for general usage. This would require significant architectural changes, including:
+  - A robust multi-user authentication system.
+  - Moving from SQLite to a scalable cloud database (e.g., PostgreSQL, MySQL on a cloud provider).
+  - Deploying the backend and dashboard to a cloud platform (e.g., Heroku, Vercel, AWS).
+  - A plan for managing user data privacy and security.
+
 ## 📝 Development
 
 ### Adding New Features

@@ -6,12 +6,16 @@ class GmailEmailTracker {
     this.lastInjectionTime = 0;
     this.injectionThrottle = 1000; // 1 second throttle
     this.isInjecting = false;
+    this.currentEmailId = null;
     this.init();
   }
 
   init() {
     // Wait for Gmail to load
     this.waitForGmail();
+    
+    // Listen for URL changes (Gmail uses pushState for navigation)
+    this.setupUrlChangeListener();
   }
 
   waitForGmail() {
@@ -36,18 +40,29 @@ class GmailEmailTracker {
     // Use a more efficient observer with throttling
     let timeoutId = null;
     this.observer = new MutationObserver((mutations) => {
-      // Throttle the injection to prevent excessive calls
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
+      // Only process if we're not already injecting
+      if (this.isInjecting) return;
       
-      timeoutId = setTimeout(() => {
-        // Only inject if we're not already injecting and enough time has passed
-        const now = Date.now();
-        if (!this.isInjecting && (now - this.lastInjectionTime) > this.injectionThrottle) {
-          this.injectCaptureButton();
+      // Check if we're viewing a different email
+      const newEmailId = this.getCurrentEmailId();
+      if (newEmailId !== this.currentEmailId) {
+        this.currentEmailId = newEmailId;
+        // Clear any existing buttons when switching emails
+        this.removeAllCaptureButtons();
+        
+        // Throttle the injection to prevent excessive calls
+        if (timeoutId) {
+          clearTimeout(timeoutId);
         }
-      }, 100); // 100ms debounce
+        
+        timeoutId = setTimeout(() => {
+          // Only inject if we're not already injecting and enough time has passed
+          const now = Date.now();
+          if (!this.isInjecting && (now - this.lastInjectionTime) > this.injectionThrottle) {
+            this.injectCaptureButton();
+          }
+        }, 200); // Increased debounce to 200ms
+      }
     });
 
     // Only observe specific areas that matter for email viewing
@@ -60,6 +75,73 @@ class GmailEmailTracker {
         characterData: false // Don't observe text changes
       });
     }
+  }
+
+  getCurrentEmailId() {
+    // Extract email ID from URL or content to detect email changes
+    const urlParams = new URLSearchParams(window.location.search);
+    let messageId = urlParams.get('th');
+    
+    if (!messageId && window.location.hash) {
+      const hashParams = new URLSearchParams(window.location.hash.split('?')[1] || '');
+      messageId = hashParams.get('th');
+    }
+    
+    if (!messageId) {
+      const urlMatch = window.location.href.match(/[?&]th=([^&]+)/);
+      messageId = urlMatch ? urlMatch[1] : null;
+    }
+    
+    // Fallback: use subject line as identifier
+    if (!messageId) {
+      const subject = this.extractSubject();
+      if (subject) {
+        messageId = btoa(subject).substring(0, 20);
+      }
+    }
+    
+    return messageId || 'unknown';
+  }
+
+  removeAllCaptureButtons() {
+    // Remove all existing capture buttons
+    const existingButtons = document.querySelectorAll('.gmail-tracker-capture-btn');
+    existingButtons.forEach(button => {
+      if (button.parentNode) {
+        button.parentNode.removeChild(button);
+      }
+    });
+  }
+
+  setupUrlChangeListener() {
+    // Listen for Gmail's pushState navigation
+    let currentUrl = window.location.href;
+    
+    const checkUrlChange = () => {
+      if (window.location.href !== currentUrl) {
+        currentUrl = window.location.href;
+        // URL changed, clear buttons and re-inject
+        this.removeAllCaptureButtons();
+        this.currentEmailId = null;
+        
+        // Wait a bit for Gmail to update the DOM
+        setTimeout(() => {
+          this.injectCaptureButton();
+        }, 500);
+      }
+    };
+    
+    // Check for URL changes periodically
+    setInterval(checkUrlChange, 1000);
+    
+    // Also listen for popstate events
+    window.addEventListener('popstate', () => {
+      setTimeout(() => {
+        this.removeAllCaptureButtons();
+        this.currentEmailId = null;
+        this.injectCaptureButton();
+      }, 500);
+    });
   }
 
   injectCaptureButton() {
@@ -84,11 +166,8 @@ class GmailEmailTracker {
         return;
       }
 
-      // Check if button already exists
-      if (document.getElementById('gmail-tracker-capture-btn')) {
-        this.isInjecting = false;
-        return;
-      }
+      // Remove any existing buttons first
+      this.removeAllCaptureButtons();
 
       // Create capture button
       this.createCaptureButton(emailContent);
@@ -101,6 +180,7 @@ class GmailEmailTracker {
     const button = document.createElement('button');
     button.textContent = ' 📧 Capture to Tracker';
     button.className = 'gmail-tracker-capture-btn';
+    button.id = 'gmail-tracker-capture-btn-' + Date.now(); // Unique ID
     button.style.cssText = `
       background: linear-gradient(135deg, #1a73e8, #1557b0);
       color: white;
@@ -115,6 +195,7 @@ class GmailEmailTracker {
       transition: all 0.2s ease;
       margin-left: 8px;
       z-index: 1000;
+      position: relative;
     `;
 
     button.addEventListener('mouseenter', () => {
@@ -140,13 +221,21 @@ class GmailEmailTracker {
     // Insert button near Gmail's action buttons
     const actionBar = emailContent.querySelector('.iH > div') || 
                      emailContent.querySelector('[role="toolbar"]') ||
-                     emailContent.querySelector('.adn > div:first-child');
+                     emailContent.querySelector('.adn > div:first-child') ||
+                     emailContent.querySelector('.h7');
     
     if (actionBar) {
-      actionBar.appendChild(button);
+      // Check if button already exists in this action bar
+      const existingButton = actionBar.querySelector('.gmail-tracker-capture-btn');
+      if (!existingButton) {
+        actionBar.appendChild(button);
+      }
     } else {
       // Fallback: insert at the top of email content
-      emailContent.insertBefore(button, emailContent.firstChild);
+      const existingButton = emailContent.querySelector('.gmail-tracker-capture-btn');
+      if (!existingButton) {
+        emailContent.insertBefore(button, emailContent.firstChild);
+      }
     }
 
     return button;
@@ -530,4 +619,12 @@ class GmailEmailTracker {
 }
 
 // Initialize the tracker when the script loads
-new GmailEmailTracker(); 
+const tracker = new GmailEmailTracker();
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', () => {
+  if (tracker.observer) {
+    tracker.observer.disconnect();
+  }
+  tracker.removeAllCaptureButtons();
+}); 
