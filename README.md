@@ -2,7 +2,7 @@
 
 A complete Firefox browser extension system for capturing Gmail emails with a FastAPI backend and React dashboard for management and annotation.
 
-## 🎯 Project Overview
+## Project Overview
 
 This project creates a **local email management system** that works with Gmail. Here's how it works:
 
@@ -12,9 +12,9 @@ This project creates a **local email management system** that works with Gmail. 
 
 **No cloud services or external APIs required** - everything runs locally on your machine!
 
-## 🚀 Features
+## Features
 
-- **Firefox Extension**: Discreet "📧 Capture to Tracker" button injected into Gmail
+- **Firefox Extension**: Discreet "Capture to Tracker" button injected into Gmail
 - **Email Data Capture**: Extracts subject, sender, timestamp, body, and URL
 - **FastAPI Backend**: RESTful API with SQLite database storage
 - **React Dashboard**: Modern, responsive interface for email management
@@ -22,7 +22,7 @@ This project creates a **local email management system** that works with Gmail. 
 - **Annotations**: Add personal notes and tags to captured emails
 - **Real-time Updates**: Instant feedback and notifications
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 firefox-agent/
@@ -44,7 +44,7 @@ firefox-agent/
 └── README.md                # This file
 ```
 
-## 🛠️ Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -103,7 +103,7 @@ The dashboard will start on `http://localhost:3000`
 5. **Navigate to Gmail** (`https://mail.google.com`)
 6. **Open any email** - you should see a "📧 Capture to Tracker" button
 
-## 🎯 Usage
+## Usage
 
 ### Capturing Emails
 
@@ -122,7 +122,7 @@ The dashboard will start on `http://localhost:3000`
 6. **Click "Open in Gmail"** to view the original email
 7. **Click "Delete"** to remove emails from the tracker
 
-## 🔧 API Endpoints
+## API Endpoints
 
 - `POST /capture` - Capture new email
 - `GET /emails` - Get all emails
@@ -130,7 +130,7 @@ The dashboard will start on `http://localhost:3000`
 - `PUT /emails/{id}` - Update email annotations
 - `DELETE /emails/{id}` - Delete email
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Extension Not Working
 - **Check Firefox console** for errors (F12)
@@ -149,14 +149,14 @@ The dashboard will start on `http://localhost:3000`
 - **Debug mode available** for troubleshooting
 - **Single-pass data extraction** for better performance
 
-## 🔒 Security Notes
+## Security Notes
 
 - **Local Development Only**: This setup is for local development
 - **No Authentication**: Add authentication for production use
 - **CORS Configured**: Properly configured for localhost development
 - **SQLite Database**: Local file-based storage
 
-## 🚀 Production Deployment
+## Production Deployment
 
 For production deployment:
 
@@ -168,16 +168,14 @@ For production deployment:
 6. **Deploy dashboard** to a web server
 7. **Add environment variables** for configuration
 
-## 📝 Future Enhancements / TODO
+ ## 📝 Future Enhancements / TODO
 
 - [ ] **Public Hosting**: Research the feasibility of a publicly hosted version for general usage. This would require significant architectural changes, including:
   - A robust multi-user authentication system.
   - Moving from SQLite to a scalable cloud database (e.g., PostgreSQL, MySQL on a cloud provider).
   - Deploying the backend and dashboard to a cloud platform (e.g., Heroku, Vercel, AWS).
   - A plan for managing user data privacy and security.
-
-## 📝 Development
-
+ 
 ### Adding New Features
 
 1. **Backend**: Add new endpoints in `main.py`
@@ -190,10 +188,10 @@ For production deployment:
 - **Extension**: Test in Firefox with `about:debugging`
 - **Dashboard**: Use React's development tools
 
-## 📄 License
+## License
 
 This project is for educational and personal use. Modify as needed for your requirements.
 
 ---
 
-**Happy Email Tracking! 📧✨** 
+**Happy Tracking!* 
